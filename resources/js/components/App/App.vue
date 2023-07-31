@@ -1,9 +1,9 @@
 <template>
-    <h1>App is </h1>
+    <h1>App</h1>
+    <span>sdjsakdjsajd </span>
 </template>
-
 <script>
 export default {
-    name: "App"
-}
+    name: "App",
+};
 </script>
