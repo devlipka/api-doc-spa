@@ -44,7 +44,7 @@ return new class extends Migration
                 'multipart/alternative',
                 'multipart/related',
                 'multipart/form-data',
-                'text/scss',
+                'text/css',
                 'text/csv',
                 'text/html',
                 'text/javascript (obsolete)',

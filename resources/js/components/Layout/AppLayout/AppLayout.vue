@@ -17,5 +17,3 @@ export default {
     components: { Navigation, Header },
 };
 </script>
-
-<style scoped></style>
