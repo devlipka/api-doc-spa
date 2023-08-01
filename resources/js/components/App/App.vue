@@ -1,6 +1,7 @@
 <template>
-    <h1>App</h1>
-    <span>sdjsakdjsajd </span>
+    <component :is="$route.meta.layout || 'div'">
+        <router-view />
+    </component>
 </template>
 <script>
 export default {
