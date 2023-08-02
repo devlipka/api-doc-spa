@@ -1,3 +1,67 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400&family=Roboto+Condensed:ital,wght@0,400;0,700;1,400&display=swap');
+
 @tailwind base;
 @tailwind utilities;
 @tailwind components;
+
+* {
+    @apply text-brandGreen font-montserrat font-semibold;
+}
+
+textarea:focus, input:focus{
+    outline: none;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active{
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: #ffffff;
+    transition: background-color 5000s ease-in-out 0s;
+    box-shadow: inset 0 0 20px 20px #23232329;
+}
+
+a {
+    @apply underline;
+}
+
+a:hover {
+    @apply no-underline;
+}
+
+.header {
+    height: 60px;
+}
+
+.content {
+    height: calc(100vh - 60px);
+}
+
+.navigation .router-link-active {
+    @apply bg-brandBlue;
+}
+
+input {
+    @apply bg-brandBlue py-2 px-4 rounded border border-brandGreen font-roboto text-brandGreen w-full;
+}
+
+input.error {
+    /* TODO: replace with proper value */
+    border-color: red;
+}
+
+.error-label {
+    /* TODO: replace with proper value */
+    color: #f3f369;
+    border-left: 7px solid red;
+    @apply text-xs mt-1 pl-1.5 rounded-sm opacity-80;
+}
+
+button, [type="submit"] {
+    @apply bg-brandBlue rounded px-4 py-2 transition-colors ease-in-out duration-500;
+}
+
+button:hover, [type="submit"]:hover {
+    @apply bg-brandGreen text-brandBlue;
+}

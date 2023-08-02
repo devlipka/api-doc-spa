@@ -1,8 +1,8 @@
 <template>
-    <header class="header d-flex justify-content-between">
-        <a href="">
-            <h1>Hello world!</h1>
-        </a>
+    <header class="header bg-brandDarkGreen flex items-center px-4">
+        <router-link class="text-xl" :to="{ name: 'users' }"
+            >Monolith</router-link
+        >
         <button class="btn"><i class="fa-solid fa-user"></i></button>
     </header>
 </template>

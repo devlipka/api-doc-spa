@@ -1,6 +1,6 @@
 <template>
     <Header />
-    <div>
+    <div class="content flex items-center justify-center bg-brandBlue">
         <slot />
     </div>
 </template>
