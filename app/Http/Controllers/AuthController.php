@@ -14,7 +14,7 @@ class AuthController extends Controller
     /**
      * Login user
      */
-    public function signIn($request)
+    public function signIn(Request $request)
     {
         $request->validate([
             'email' => 'required|email',
@@ -27,8 +27,8 @@ class AuthController extends Controller
 
         $user = Auth::user();
 
-        $cookie = cookie('jwt', $user->createToken('token')->plainTextToken, 60*24); // 1 day
-        return response(['message' => 'success'])->withCookie($cookie);
+        $token = $user->createToken('token')->plainTextToken;
+        return response(['message' => 'Welcome back!', 'token' => $token]);
     }
 
     /**
@@ -51,19 +51,16 @@ class AuthController extends Controller
         $user->addRole('user');
 
         if($save) {
-//            Auth::attempt($request->only('email', 'password'));
-            Auth::login($user);
-            $cookie = cookie('jwt', $user->createToken('token')->plainTextToken, 60*24); // 1 day
-            return response(['message' => 'Success', 'data' => $user])->withCookie($cookie);
-        } else {
-            return response(['message' => 'Something went wrong'], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return response(['message' => 'Account has been successfully registered!']);
         }
+
+        return response(['message' => 'Something went wrong'], Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 
     /**
      * Return user's info
      */
-    public function user(): ?\Illuminate\Contracts\Auth\Authenticatable
+    public function user()
     {
         return Auth::user();
     }
@@ -71,10 +68,10 @@ class AuthController extends Controller
     /**
      * Logout user
      */
-    public function logout()
+    public function logout(Request $request)
     {
-        $cookie = Cookie::forget('jwt');
-        return response(['message' => 'Success'])->withCookie($cookie);
+        $request->user()->currentAccessToken()->delete();
+        return response(['message' => 'Success']);
     }
 
 }

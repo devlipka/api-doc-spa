@@ -62,7 +62,6 @@
 </template>
 
 <script>
-import axios from "axios";
 import { computed, reactive } from "vue";
 import {
     email,
@@ -72,6 +71,7 @@ import {
     maxLength,
     minLength,
 } from "@vuelidate/validators";
+import store from "@/store/index.js";
 import { useVuelidate } from "@vuelidate/core";
 
 export default {
@@ -131,27 +131,21 @@ export default {
         register() {
             this.v$.$validate();
             if (!this.v$.$error) {
-                console.log(this.state);
                 const {
                     email,
                     lastName,
                     firstName,
                     password: { password, confirm },
                 } = this.state;
-                axios
-                    .post("/api/signUp", {
-                        email,
-                        password,
-                        lastName,
-                        firstName,
-                        password_confirmation: confirm,
-                    })
-                    .then((response) => console.log(response))
-                    .catch((err) => console.log(err));
-            } else {
-                console.log("ERR");
+
+                store.dispatch("auth/register", {
+                    email,
+                    password,
+                    lastName,
+                    firstName,
+                    password_confirmation: confirm,
+                });
             }
-            // this.$router.push("/");
         },
     },
 };

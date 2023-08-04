@@ -5,35 +5,48 @@
         <ul>
             <li>
                 <router-link
-                    class="p-4 block transition-colors ease-in-out hover:bg-brandBlue duration-500"
-                    :to="{ name: 'users' }"
+                    class="no-underline p-4 block transition-colors ease-in-out hover:bg-brandBlue duration-500"
+                    :to="{ name: ROUTE_NAMES.USERS }"
                     >Users</router-link
                 >
             </li>
             <li>
                 <router-link
-                    class="p-4 block transition-colors ease-in-out hover:bg-brandBlue duration-500"
-                    :to="{ name: 'products' }"
+                    class="no-underline p-4 block transition-colors ease-in-out hover:bg-brandBlue duration-500"
+                    :to="{ name: ROUTE_NAMES.PRODUCTS }"
                     >Products</router-link
                 >
             </li>
             <li>
                 <router-link
-                    class="p-4 block transition-colors ease-in-out hover:bg-brandBlue duration-500"
-                    :to="{ name: 'profile' }"
+                    class="no-underline p-4 block transition-colors ease-in-out hover:bg-brandBlue duration-500"
+                    :to="{ name: ROUTE_NAMES.PROFILE }"
                 >
                     My Profile
                 </router-link>
             </li>
         </ul>
         <div class="px-6">
-            <a href="/" class="btn btn-danger">Log out</a>
+            <button type="button" @click="onLogOut">Log out</button>
         </div>
     </nav>
 </template>
 
 <script>
+import { ROUTE_NAMES } from "@/constants/routeNames.constants.js";
+import store from "@/store/index.js";
+
 export default {
     name: "Navigation",
+    computed: {
+        ROUTE_NAMES() {
+            return ROUTE_NAMES;
+        },
+    },
+    methods: {
+        onLogOut() {
+            store.dispatch("auth/logout");
+        },
+    },
 };
 </script>

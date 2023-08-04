@@ -26,6 +26,7 @@
         "vue": "^3.2.36",
         "vue-loader": "^17.0.1",
         "vue-router": "4",
-        "vue-tailwind": "^2.5.1"
+        "vue-tailwind": "^2.5.1",
+        "vuex": "^4.0.2"
     }
 }

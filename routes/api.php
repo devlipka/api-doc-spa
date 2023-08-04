@@ -17,7 +17,6 @@ use Illuminate\Support\Facades\Route;
 Route::post('/signIn', [\App\Http\Controllers\AuthController::class, 'signIn']);
 Route::post('/signUp', [\App\Http\Controllers\AuthController::class, 'signUp']);
 
-Route::post('/signIn', [\App\Http\Controllers\AuthController::class, 'signIn']);
 Route::middleware('auth:sanctum')->group(function (){
     Route::get('/user', [\App\Http\Controllers\AuthController::class, 'user']);
     Route::post('/logout', [\App\Http\Controllers\AuthController::class, 'logout']);

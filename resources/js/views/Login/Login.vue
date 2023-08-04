@@ -11,7 +11,7 @@
                 placeholder="Email"
                 v-model="state.email"
             />
-            <span v-if="v$.email.$error" class="">
+            <span v-if="v$.email.$error" class="error-label">
                 {{ v$.email.$errors[0].$message }}
             </span>
         </div>
@@ -21,10 +21,13 @@
                 v-model="state.password"
                 placeholder="Password"
             />
-            <span v-if="v$.password.$error" class="">
+            <span v-if="v$.password.$error" class="error-label">
                 {{ v$.password.$errors[0].$message }}
             </span>
         </div>
+        <span v-if="state.error" class="error-label">
+            {{ state.error }}
+        </span>
         <div class="flex justify-end mb-2">
             <button type="submit" class="">Log in</button>
         </div>
@@ -46,6 +49,7 @@ export default {
     setup() {
         const state = reactive({
             email: "",
+            error: "",
             password: "",
         });
 
@@ -73,11 +77,11 @@ export default {
         login() {
             this.v$.$validate();
             if (!this.v$.$error) {
-                console.log("Suc");
-            } else {
-                console.log("ERR");
+                this.$store.dispatch("auth/login", {
+                    email: this.state.email,
+                    password: this.state.password,
+                });
             }
-            // this.$router.push("/");
         },
     },
 };
