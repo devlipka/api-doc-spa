@@ -15,7 +15,7 @@
                 {{ v$.email.$errors[0].$message }}
             </span>
         </div>
-        <div class="mb-3 password flex flex-col">
+        <div class="password flex flex-col">
             <input
                 type="password"
                 v-model="state.password"
@@ -28,7 +28,7 @@
         <span v-if="state.error" class="error-label">
             {{ state.error }}
         </span>
-        <div class="flex justify-end mb-2">
+        <div class="flex justify-end mb-2 mt-2">
             <button type="submit" class="">Log in</button>
         </div>
         <div class="new-account-link">
@@ -43,6 +43,8 @@
 import { computed, reactive } from "vue";
 import { useVuelidate } from "@vuelidate/core";
 import { required, email, minLength, maxLength } from "@vuelidate/validators";
+import { ROUTE_NAMES } from "@/constants/routeNames.constants.js";
+import router from "@/router/index.js";
 
 export default {
     name: "Login",
@@ -77,10 +79,20 @@ export default {
         login() {
             this.v$.$validate();
             if (!this.v$.$error) {
-                this.$store.dispatch("auth/login", {
-                    email: this.state.email,
-                    password: this.state.password,
-                });
+                this.state.error = "";
+                this.$store
+                    .dispatch("auth/login", {
+                        email: this.state.email,
+                        password: this.state.password,
+                    })
+                    .then(function () {
+                        router.push({ name: ROUTE_NAMES.HOME });
+                    })
+                    .catch(
+                        (res) =>
+                            (this.state.error =
+                                res.response?.data?.message || ""),
+                    );
             }
         },
     },

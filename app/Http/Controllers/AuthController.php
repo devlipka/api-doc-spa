@@ -28,7 +28,7 @@ class AuthController extends Controller
         $user = Auth::user();
 
         $token = $user->createToken('token')->plainTextToken;
-        return response(['message' => 'Welcome back!', 'token' => $token]);
+        return response(['token' => $token, 'user' => $user]);
     }
 
     /**

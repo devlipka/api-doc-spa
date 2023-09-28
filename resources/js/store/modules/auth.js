@@ -1,64 +1,65 @@
-import axios from "axios";
 import router from "@/router/index.js";
+import AuthService from "@/services/auth.service";
 import { ROUTE_NAMES } from "@/constants/routeNames.constants.js";
-import { HTTP_STATUS_CODES } from "@/constants/httpStatuses.constants.js";
+import { AUTH_MUTATION_TYPES } from "@/constants/mutationTypes/auth.mutationTypes.constants.js";
+
+const user = JSON.parse(localStorage.getItem("user"));
+const initialState = user
+    ? { status: { loggedIn: true }, user }
+    : { status: { loggedIn: false }, user: null };
 
 export default {
-    state: {},
     namespaced: true,
-    getters: {
-        authToken() {
-            return localStorage.getItem("banana_key") || "";
-        },
-    },
+    state: initialState,
     actions: {
-        async login({ commit, dispatch }, payload) {
-            try {
-                console.log(payload);
-                const res = await axios.post("/api/signIn", payload);
-                const { message, token } = res?.data;
-
-                // TODO: Replace with notification
-                console.info(message, token);
-                localStorage.setItem("banana_key", token);
-                dispatch("user/setUserData", message, {
-                    root: true,
-                });
-                router.push({ name: ROUTE_NAMES.HOME });
-            } catch (error) {
-                // TODO: Replace with notification
-                console.error(error);
-            }
+        login({ commit }, user) {
+            return AuthService.login(user).then(
+                (user) => {
+                    commit(AUTH_MUTATION_TYPES.LOGIN_SUCCESS, user);
+                    return Promise.resolve(user);
+                },
+                (error) => {
+                    commit(AUTH_MUTATION_TYPES.LOGIN_FAILURE);
+                    return Promise.reject(error);
+                },
+            );
         },
-        async register({ commit }, payload) {
-            try {
-                const res = await axios.post("/api/signUp", payload);
-                const { data } = res;
-                // TODO: Replace with notification
-                console.info(data.message);
-
-                router.push({ name: ROUTE_NAMES.LOGIN });
-            } catch (error) {
-                // TODO: Replace with notification
-                console.error(error);
-            }
+        logout({ commit }) {
+            AuthService.logout();
+            commit(AUTH_MUTATION_TYPES.LOGOUT);
         },
-        async logout({ dispatch }) {
-            try {
-                await axios.post("/api/logout");
-                dispatch("clearAuthData");
-            } catch (error) {
-                console.error(error);
-            }
-        },
-        clearAuthData({ dispatch }) {
-            dispatch("user/setUserData", null, {
-                root: true,
-            });
-
-            localStorage.removeItem("banana_key");
-            router.push({ name: ROUTE_NAMES.LOGIN });
+        register({ commit }, user) {
+            return AuthService.register(user).then(
+                (response) => {
+                    commit(AUTH_MUTATION_TYPES.REGISTER_SUCCESS);
+                    router.push({ name: ROUTE_NAMES.LOGIN });
+                    return Promise.resolve(response.data);
+                },
+                (error) => {
+                    commit(AUTH_MUTATION_TYPES.REGISTER_FAILURE);
+                    return Promise.reject(error);
+                },
+            );
         },
     },
-    mutations: {},
+    mutations: {
+        [AUTH_MUTATION_TYPES.LOGIN_SUCCESS](state, user) {
+            state.status.loggedIn = true;
+            state.user = user;
+        },
+        [AUTH_MUTATION_TYPES.LOGIN_FAILURE](state) {
+            state.status.loggedIn = false;
+            state.user = null;
+        },
+        [AUTH_MUTATION_TYPES.LOGOUT](state) {
+            state.status.loggedIn = false;
+            state.user = null;
+        },
+        [AUTH_MUTATION_TYPES.REGISTER_SUCCESS](state) {
+            state.status.loggedIn = false;
+        },
+        [AUTH_MUTATION_TYPES.REGISTER_FAILURE](state) {
+            state.status.loggedIn = false;
+        },
+    },
 };

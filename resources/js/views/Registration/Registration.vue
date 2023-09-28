@@ -71,8 +71,9 @@ import {
     maxLength,
     minLength,
 } from "@vuelidate/validators";
-import store from "@/store/index.js";
 import { useVuelidate } from "@vuelidate/core";
+import { ROUTE_NAMES } from "@/constants/routeNames.constants.js";
+import router from "@/router/index.js";
 
 export default {
     name: "Registration",
@@ -138,13 +139,17 @@ export default {
                     password: { password, confirm },
                 } = this.state;
 
-                store.dispatch("auth/register", {
-                    email,
-                    password,
-                    lastName,
-                    firstName,
-                    password_confirmation: confirm,
-                });
+                this.$store
+                    .dispatch("auth/register", {
+                        email,
+                        password,
+                        lastName,
+                        firstName,
+                        password_confirmation: confirm,
+                    })
+                    .then(() => {
+                        router.push({ name: ROUTE_NAMES.LOGIN });
+                    });
             }
         },
     },

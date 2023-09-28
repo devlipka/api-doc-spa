@@ -1,5 +1,4 @@
 import { createWebHistory, createRouter } from "vue-router";
-import store from "@/store";
 import Login from "@/views/Login/Login.vue";
 import Users from "@/views/Users/Users.vue";
 import Profile from "@/views/Profile/Profile.vue";
@@ -55,7 +54,7 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    const isUserAuthenticated = store.getters["auth/authToken"];
+    const isUserAuthenticated = localStorage.getItem("banana_keys");
     const routeRequiresAuth = to.matched.some((item) => item.meta.authOnly);
     if (routeRequiresAuth && !isUserAuthenticated) {
         next("/sign-in");

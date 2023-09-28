@@ -33,8 +33,8 @@
 </template>
 
 <script>
+import router from "@/router/index.js";
 import { ROUTE_NAMES } from "@/constants/routeNames.constants.js";
-import store from "@/store/index.js";
 
 export default {
     name: "Navigation",
@@ -45,7 +45,9 @@ export default {
     },
     methods: {
         onLogOut() {
-            store.dispatch("auth/logout");
+            this.$store.dispatch("auth/logout").then(function () {
+                router.push({ name: ROUTE_NAMES.LOGIN });
+            });
         },
     },
 };

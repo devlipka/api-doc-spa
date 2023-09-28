@@ -14,8 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('/signIn', [\App\Http\Controllers\AuthController::class, 'signIn']);
-Route::post('/signUp', [\App\Http\Controllers\AuthController::class, 'signUp']);
+Route::post('/auth/signIn', [\App\Http\Controllers\AuthController::class, 'signIn']);
+Route::post('/auth/signUp', [\App\Http\Controllers\AuthController::class, 'signUp']);
 
 Route::middleware('auth:sanctum')->group(function (){
     Route::get('/user', [\App\Http\Controllers\AuthController::class, 'user']);
