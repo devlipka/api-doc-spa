@@ -8,31 +8,33 @@ import Registration from "@/views/Registration/Registration.vue";
 import { ROUTE_NAMES } from "@/constants/routeNames.constants.js";
 import AppLayout from "@/components/Layout/AppLayout/AppLayout.vue";
 import AuthLayout from "@/components/Layout/AuthLayout/AuthLayout.vue";
+import { ROLES } from "@/constants/roles.constants.js";
+import userService from "@/services/user.service.js";
 
 const routes = [
     {
         path: "/",
         component: Dashboard,
         name: ROUTE_NAMES.HOME,
-        meta: { layout: AppLayout, authOnly: true },
+        meta: { layout: AppLayout, auth: [] },
     },
     {
         path: "/users",
         component: Users,
         name: ROUTE_NAMES.USERS,
-        meta: { layout: AppLayout, authOnly: true },
+        meta: { layout: AppLayout, auth: [ROLES.ADMIN] },
     },
     {
         path: "/profile",
         component: Profile,
         name: ROUTE_NAMES.PROFILE,
-        meta: { layout: AppLayout, authOnly: true },
+        meta: { layout: AppLayout, auth: [] },
     },
     {
         path: "/products",
         component: Products,
         name: ROUTE_NAMES.PRODUCTS,
-        meta: { layout: AppLayout, authOnly: true },
+        meta: { layout: AppLayout, auth: [] },
     },
     {
         path: "/sign-in",
@@ -54,11 +56,14 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    const isUserAuthenticated = localStorage.getItem("banana_keys");
-    const routeRequiresAuth = to.matched.some((item) => item.meta.authOnly);
-    if (routeRequiresAuth && !isUserAuthenticated) {
+    const userData = userService.getUserFromLS();
+    const { auth } = to.meta;
+    const routeRequiresAuth = to.matched.some((item) => item.meta.auth);
+    if (routeRequiresAuth && !userData) {
         next("/sign-in");
-    } else if (isUserAuthenticated && !routeRequiresAuth) {
+    } else if (userData && !routeRequiresAuth) {
+        next("/");
+    } else if (userData && auth.length && !auth.includes(userData.role)) {
         next("/");
     } else {
         next();

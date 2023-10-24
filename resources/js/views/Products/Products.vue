@@ -1,4 +1,4 @@
-<template><div>sdfkjdsfksdgf</div></template>
+<template><div>Products</div></template>
 
 <script>
 export default {
